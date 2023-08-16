@@ -20,6 +20,7 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
+// import UserController from 'App/Controllers/Http/UsersController'
 
 Route.get('/', async () => {
   return { hello: 'world' }
@@ -34,14 +35,15 @@ Route.get('health', async ({ response }) => {
 })
 
 
-
+// login endpoint 
 Route.get('auth/google', 'AuthController.redirect');
 Route.get('auth/google/callback', 'AuthController.handleCallback');
+
 // users endpoints
 Route.group(() => {
-  Route.get('/users', 'UserController.index');
-  Route.get('/users/:id', 'UserController.show');
-  Route.post('/users', 'UserController.store');
-  Route.put('/users/:id', 'UserController.update');
-  Route.delete('/users/:id', 'UserController.destroy');
+  Route.get('/users', 'UsersController.index');
+  Route.get('/users/:id', 'UsersController.show');
+  Route.post('/users', 'UsersController.store');
+  Route.put('/users/:id', 'UsersController.update');
+  Route.delete('/users/:id', 'UsersController.destroy');
 }).prefix('api');
