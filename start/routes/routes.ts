@@ -8,7 +8,3 @@ Route.get('health', async ({ response }) => {
 
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
-
-
-Route.get('auth/google', 'AuthController.redirectToGoogle');
-Route.get('google/callback', 'AuthController.handleGoogleCallback');
