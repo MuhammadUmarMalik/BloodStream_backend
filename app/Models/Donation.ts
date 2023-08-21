@@ -3,21 +3,7 @@ import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm';
 import User from './User';
 
 export default class Donation extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number;
-
-  @column()
-  public donor_id: number;
-
-  @column()
-  public recipient_id: number;
-
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime;
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime;
-
+  
   @belongsTo(() => User, {
     foreignKey: 'donor_id',
   })
@@ -27,4 +13,20 @@ export default class Donation extends BaseModel {
     foreignKey: 'recipient_id',
   })
   public recipient: BelongsTo<typeof User>;
+
+  @column({ isPrimary: true })
+  public donation_id: number;
+
+  @column()
+  public user_id: number;
+
+  @column()
+  public donor_id: number;
+
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime;
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updatedAt: DateTime;
+
 }

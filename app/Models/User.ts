@@ -1,17 +1,22 @@
 import { DateTime } from 'luxon'
-// import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel ,HasMany,hasMany} from '@ioc:Adonis/Lucid/Orm'
-import Donation from './Donation';
-import Post from './Request';
-import Review from './Review';
+import Hash from '@ioc:Adonis/Core/Hash'
+import { column, beforeSave, BaseModel ,HasMany,hasMany, manyToMany,ManyToMany} from '@ioc:Adonis/Lucid/Orm'
+// import Donation from './Donation';
 
 export default class User extends BaseModel {
+
+
+
+
   @column({ isPrimary: true })
   public id: number
 
   @column()
   public name:string
-  
+
+  @column()
+  public gender:string
+
   @column()
   public blood_group:string
 
@@ -19,16 +24,22 @@ export default class User extends BaseModel {
   public phone_number:string
 
   @column()
-  public latitude:number
+  public address:string
 
   @column()
-  public longitude:number
+  public city:string
 
   @column()
   public enable_request:boolean
 
   @column()
+  public donation_date:DateTime
+  
+  @column()
   public email: string
+
+  @column({ serializeAs: null })
+  public password: string
 
   @column()
   public provider_id:string
@@ -36,48 +47,34 @@ export default class User extends BaseModel {
   @column()
   public provider:string
 
-
-
   @column()
   public rememberMeToken: string | null
 
+  
+  @beforeSave()
+  public static async hashPassword (user: User) {
+    if (user.$dirty.password) {
+      user.password = await Hash.make(user.password)
+    }
+  }
   //relationship between migrations
   
-  @hasMany(() => Donation, {
-    foreignKey: 'donor_id',
-  })
-  public donationsGiven: HasMany<typeof Donation>;
+ 
+@manyToMany(() => User, {
+  localKey: 'id',
+  pivotForeignKey: 'user_id',
+  relatedKey: 'id',
+  pivotRelatedForeignKey: 'donor_id',
+})
 
-  @hasMany(() => Donation, {
-    foreignKey: 'recipient_id',
-  })
-  public donationsReceived: HasMany<typeof Donation>;
+public donation: ManyToMany<typeof User>
 
-  @hasMany(() => Post)
-  public posts: HasMany<typeof Post>;
 
-  @hasMany(() => Review, {
-    foreignKey: 'user_id',
-  })
-  public reviewsGiven: HasMany<typeof Review>;
-
-  @hasMany(() => Review, {
-    foreignKey: 'recipient_id',
-  })
-  public reviewsReceived: HasMany<typeof Review>;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  // @beforeSave()
-  // public static async hashPassword (user: User) {
-  //   if (user.$dirty.password) {
-  //     user.password = await Hash.make(user.password)
-  //   }
-  // }
-
   
 }

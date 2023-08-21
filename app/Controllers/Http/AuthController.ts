@@ -38,7 +38,7 @@ export default class AuthController {
       const newUser = await User.firstOrCreate(findUser, userDetails);
 
       await auth.use('api').login(newUser);
-      response.status(200);
+      response.status(200).send('login successfully');
 
       return newUser;
     } catch (error) {
@@ -47,4 +47,5 @@ export default class AuthController {
       response.status(500).send('An error occurred during authentication.');
     }
   }
+
 }
